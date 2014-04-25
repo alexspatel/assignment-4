@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "model.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -72,12 +73,28 @@ int main(int argc, char* argv[]) {
 
 	if (model_type == "brute") model = new brute_model(text.str(), k);
 	else if (model_type == "map") model = new map_model(text.str(), k);
-	else if (model_type == "unordered map") model = new unordered_map_model(text.str(), k);
+	else if (model_type == "umap") model = new u_map_model(text.str(), k);
 	else if (model_type == "word") model = new word_model(text.str(), k);
 	else {
 		cout << "That model is not yet implemented, sorry." << endl;
 		return -1;
 	}
+
+	// Performance of operation
+	vector<int> numbers;
+		for (int i = 0; i < 10000000; i++) 
+		{
+			numbers.push_back(rand());
+		}
+		
+		clock_t t1, t2;
+		
+		t1 = clock();
+		sort(numbers.begin(), numbers.end());
+		t2 = clock();
+		
+		cout << "Sorted 10,000,000 numbers in " << (t2 - t1)/double(CLOCKS_PER_SEC) << " seconds." << endl;
+
 
 	init_random();
 	cout << "RESULT:" << endl;
@@ -85,8 +102,10 @@ int main(int argc, char* argv[]) {
 
 	delete model;
 
+
+	
+
 	system("pause");
 	
 	return 0;
 }
-
